@@ -1,5 +1,3 @@
-import React, { useState, useEffect } from 'react';
-import { ArrowLeft, ArrowRight } from 'lucide-react';
 // Questions array
 const questions = [
     {
@@ -340,49 +338,47 @@ const questions = [
     }
 ];
 
-const QuizApp = () => {
-    const [started, setStarted] = useState(false);
-    const [currentQuestion, setCurrentQuestion] = useState(0);
-    const [score, setScore] = useState(0);
-    const [showScore, setShowScore] = useState(false);
-    const [selectedAnswers, setSelectedAnswers] = useState([]);
-    const [answers, setAnswers] = useState(Array(questions.length).fill(null));
+function PracticeTest() {
+    const [currentQuestion, setCurrentQuestion] = React.useState(0);
+    const [showScore, setShowScore] = React.useState(false);
+    const [score, setScore] = React.useState(0);
+    const [selectedAnswers, setSelectedAnswers] = React.useState([]);
+    const [answers, setAnswers] = React.useState([]);
 
-    useEffect(() => {
-        if (questions[currentQuestion]?.multipleCorrect) {
-            setSelectedAnswers(new Array(questions[currentQuestion].answerOptions.length).fill(false));
-        } else {
-            setSelectedAnswers([]);
-        }
+    React.useEffect(() => {
+        setSelectedAnswers(new Array(questions[currentQuestion].answerOptions.length).fill(false));
     }, [currentQuestion]);
 
-    const startQuiz = () => {
-        setStarted(true);
-        setCurrentQuestion(0);
-        setScore(0);
-        setShowScore(false);
-        setAnswers(Array(questions.length).fill(null));
-    };
-
-    const handleAnswer = (isCorrect, index) => {
+    const handleAnswerOptionClick = (isCorrect, index) => {
         if (questions[currentQuestion].multipleCorrect) {
-            const newSelected = [...selectedAnswers];
-            newSelected[index] = !newSelected[index];
-            setSelectedAnswers(newSelected);
+            const newSelectedAnswers = [...selectedAnswers];
+            newSelectedAnswers[index] = !newSelectedAnswers[index];
+            setSelectedAnswers(newSelectedAnswers);
         } else {
             const newAnswers = [...answers];
             newAnswers[currentQuestion] = { selected: index, correct: isCorrect };
             setAnswers(newAnswers);
+
             if (isCorrect) setScore(score + 1);
-            handleNext();
+
+            const nextQuestion = currentQuestion + 1;
+            if (nextQuestion < questions.length) {
+                setCurrentQuestion(nextQuestion);
+            } else {
+                setShowScore(true);
+            }
         }
     };
 
     const handleMultipleSubmit = () => {
         let isCorrect = true;
+        let correctCount = 0;
+        let selectedCount = 0;
+
         questions[currentQuestion].answerOptions.forEach((option, idx) => {
-            if ((option.isCorrect && !selectedAnswers[idx]) || 
-                (!option.isCorrect && selectedAnswers[idx])) {
+            if (option.isCorrect) correctCount++;
+            if (selectedAnswers[idx]) selectedCount++;
+            if ((option.isCorrect && !selectedAnswers[idx]) || (!option.isCorrect && selectedAnswers[idx])) {
                 isCorrect = false;
             }
         });
@@ -390,106 +386,79 @@ const QuizApp = () => {
         const newAnswers = [...answers];
         newAnswers[currentQuestion] = { selected: selectedAnswers, correct: isCorrect };
         setAnswers(newAnswers);
+
         if (isCorrect) setScore(score + 1);
-        handleNext();
-    };
 
-    const handlePrev = () => {
-        if (currentQuestion > 0) {
-            setCurrentQuestion(currentQuestion - 1);
-        }
-    };
-
-    const handleNext = () => {
-        if (currentQuestion < questions.length - 1) {
-            setCurrentQuestion(currentQuestion + 1);
+        const nextQuestion = currentQuestion + 1;
+        if (nextQuestion < questions.length) {
+            setCurrentQuestion(nextQuestion);
         } else {
             setShowScore(true);
         }
     };
 
-    const handleSkip = () => {
-        const newAnswers = [...answers];
-        newAnswers[currentQuestion] = { skipped: true };
-        setAnswers(newAnswers);
-        handleNext();
+    const resetQuiz = () => {
+        setCurrentQuestion(0);
+        setScore(0);
+        setShowScore(false);
+        setSelectedAnswers([]);
+        setAnswers([]);
     };
 
-    if (!started) {
-        return (
-            <div className="flex flex-col items-center justify-center min-h-screen p-4">
-                <h1 className="text-3xl font-bold mb-8">Тест по правилам игры Мафия</h1>
-                <button 
-                    onClick={startQuiz}
-                    className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg text-xl"
-                >
-                    Начать тест
-                </button>
-            </div>
-        );
-    }
-
     if (showScore) {
-        const skippedCount = answers.filter(a => a?.skipped).length;
-        const percentage = Math.round((score / questions.length) * 100);
-
         return (
             <div className="flex flex-col items-center p-4">
                 <div className="text-2xl font-bold mb-4">
-                    Результат: {score} из {questions.length} правильных ответов ({percentage}%)
-                    <div className="text-sm text-gray-600 mt-1">
-                        Пропущено вопросов: {skippedCount}
-                    </div>
+                    Результат: {score} из {questions.length} правильных ответов 
+                    ({Math.round((score / questions.length) * 100)}%)
                 </div>
                 <button 
-                    onClick={startQuiz}
+                    onClick={resetQuiz}
                     className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
                 >
                     Пройти тест заново
                 </button>
-                
-                <div className="mt-8 w-full max-w-2xl">
-                    <h3 className="text-xl font-bold mb-4">Обзор ответов:</h3>
-                    {questions.map((question, qIndex) => {
-                        const answer = answers[qIndex];
-                        
-                        return (
-                            <div key={qIndex} className="mb-6 p-4 bg-gray-50 rounded-lg">
-                                <p className="font-semibold mb-2">
-                                    Вопрос {qIndex + 1}: {question.questionText}
-                                </p>
-                                <div className="ml-4">
-                                    {question.answerOptions.map((option, aIndex) => {
-                                        const isSelected = answer?.selected ? 
-                                            (Array.isArray(answer.selected) ? 
-                                                answer.selected[aIndex] : 
-                                                aIndex === answer.selected) : 
-                                            false;
+                {score < questions.length && (
+                    <div className="mt-8 w-full">
+                        <h3 className="text-xl font-bold mb-4">Обзор ошибок:</h3>
+                        {questions.map((question, qIndex) => {
+                            const answer = answers[qIndex];
+                            if (!answer || answer.correct) return null;
 
-                                        return (
-                                            <div 
-                                                key={aIndex} 
-                                                className={`mb-1 ${
-                                                    option.isCorrect ? 'text-green-600' : 
-                                                    isSelected ? 'text-red-600' : ''
-                                                }`}
-                                            >
-                                                {question.multipleCorrect ? '☐' : '○'} {option.answerText}
-                                                {isSelected && !option.isCorrect && ' ← Ваш неверный ответ'}
-                                                {option.isCorrect && ' ✓ Правильный ответ'}
-                                            </div>
-                                        );
-                                    })}
-                                    {answer?.skipped && (
-                                        <div className="text-yellow-600 mt-2">
-                                            Вопрос был пропущен
-                                        </div>
-                                    )}
+                            return (
+                                <div key={qIndex} className="mb-6 p-4 bg-gray-50 rounded-lg">
+                                    <p className="font-semibold mb-2">
+                                        Вопрос {qIndex + 1}: {question.questionText}
+                                    </p>
+                                    <div className="ml-4">
+                                        {question.answerOptions.map((option, aIndex) => {
+                                            const isSelected = Array.isArray(answer.selected) 
+                                                ? answer.selected[aIndex]
+                                                : aIndex === answer.selected;
+
+                                            return (
+                                                <div 
+                                                    key={aIndex} 
+                                                    className={`mb-1 ${
+                                                        option.isCorrect 
+                                                            ? 'text-green-600' 
+                                                            : isSelected 
+                                                                ? 'text-red-600'
+                                                                : ''
+                                                    }`}
+                                                >
+                                                    {question.multipleCorrect ? '☐' : '○'} {option.answerText}
+                                                    {isSelected && !option.isCorrect && ' ← Ваш неверный ответ'}
+                                                    {option.isCorrect && ' ✓ Правильный ответ'}
+                                                </div>
+                                            );
+                                        })}
+                                    </div>
                                 </div>
-                            </div>
-                        );
-                    })}
-                </div>
+                            );
+                        })}
+                    </div>
+                )}
             </div>
         );
     }
@@ -507,15 +476,14 @@ const QuizApp = () => {
                     </div>
                 )}
             </div>
-            
             <div className="flex flex-col gap-2">
                 {questions[currentQuestion].answerOptions.map((answer, index) => (
                     <button
                         key={index}
-                        onClick={() => handleAnswer(answer.isCorrect, index)}
+                        onClick={() => handleAnswerOptionClick(answer.isCorrect, index)}
                         className={`bg-white border-2 ${
-                            questions[currentQuestion].multipleCorrect && selectedAnswers[index]
-                                ? 'border-blue-500'
+                            questions[currentQuestion].multipleCorrect 
+                                ? selectedAnswers[index] ? 'border-blue-500' : 'border-gray-300'
                                 : 'border-gray-300'
                         } hover:bg-gray-100 text-left p-3 rounded`}
                     >
@@ -528,50 +496,19 @@ const QuizApp = () => {
                     </button>
                 ))}
             </div>
-
-            <div className="flex justify-between items-center mt-4">
+            {questions[currentQuestion].multipleCorrect && (
                 <button
-                    onClick={handlePrev}
-                    disabled={currentQuestion === 0}
-                    className={`flex items-center gap-2 ${
-                        currentQuestion === 0 
-                            ? 'bg-gray-300 cursor-not-allowed' 
-                            : 'bg-blue-500 hover:bg-blue-700'
-                    } text-white font-bold py-2 px-4 rounded`}
+                    onClick={handleMultipleSubmit}
+                    className="mt-4 bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
                 >
-                    <ArrowLeft size={20} /> Назад
+                    Подтвердить ответ
                 </button>
-
-                <button
-                    onClick={handleSkip}
-                    className="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded mx-2"
-                >
-                    Пропустить
-                </button>
-
-                {questions[currentQuestion].multipleCorrect && (
-                    <button
-                        onClick={handleMultipleSubmit}
-                        className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
-                    >
-                        Подтвердить
-                    </button>
-                )}
-
-                <button
-                    onClick={handleNext}
-                    disabled={currentQuestion === questions.length - 1}
-                    className={`flex items-center gap-2 ${
-                        currentQuestion === questions.length - 1 
-                            ? 'bg-gray-300 cursor-not-allowed' 
-                            : 'bg-blue-500 hover:bg-blue-700'
-                    } text-white font-bold py-2 px-4 rounded`}
-                >
-                    Вперед <ArrowRight size={20} />
-                </button>
-            </div>
+            )}
         </div>
     );
-};
+}
 
-export default QuizApp;
+ReactDOM.render(
+    <PracticeTest />,
+    document.getElementById('root')
+);
