@@ -1,5 +1,6 @@
 import React from 'react';
 
+// Array containing all test questions
 const questions = [
     {
         questionText: 'При получении четвёртого фола игрок...',
@@ -28,6 +29,15 @@ const questions = [
             { answerText: 'Ночные подсказки', isCorrect: false },
         ],
         multipleCorrect: true
+    },
+    {
+        questionText: 'Какой максимальный лимит дополнительных баллов может дать судья без согласования?',
+        answerOptions: [
+            { answerText: '2.4 балла', isCorrect: false },
+            { answerText: '2.8 балла', isCorrect: true },
+            { answerText: '3.0 балла', isCorrect: false },
+            { answerText: '3.5 балла', isCorrect: false },
+        ],
     },
     {
         questionText: 'Какой штраф получает игрок за дисквалификацию (удаление)?',
@@ -98,15 +108,101 @@ const questions = [
             { answerText: 'Открытие', isCorrect: false },
         ],
         multipleCorrect: true
+    },
+    {
+        questionText: 'Если игрок получил 3 фола и после этого попал в "угадайку" с 3 игроками, то он:',
+        answerOptions: [
+            { answerText: 'получает 30 секунд', isCorrect: false },
+            { answerText: 'получает минуту', isCorrect: true },
+            { answerText: 'не имеет права слова', isCorrect: false },
+            { answerText: 'не получает дополнительные балы от судьи', isCorrect: false },
+        ],
+    },
+    {
+        questionText: 'Если ночью мафия совершила "отстрел" игрока, который был удалён за нарушение, совершённое после того, как завершилось голосование предыдущего дня, но до того, как Судья начал отсчитывать отстрел, то в этом случае:',
+        answerOptions: [
+            { answerText: 'Днём голосование отменяется, судья утром объявляет: "Игрок был удалён, в городе промах"', isCorrect: false },
+            { answerText: 'Днём голосование проводится, судья утром объявляет: "Игрок был убит и удалён"', isCorrect: true },
+        ],
+    },
+    {
+        questionText: 'Каков лимит общей суммы дополнительных баллов, которые игроки могут получить от Судьи?',
+        answerOptions: [
+            { answerText: '2,4 баллов для игроков победившей команды и 0,6 из проигравшей', isCorrect: false },
+            { answerText: '2,2 балла в сумме, вне зависимости от команд', isCorrect: false },
+            { answerText: '2,8 баллов в сумме, 3 по согласованию с ГСом, 3,5 по согласованию с СК, вне зависимости от команд', isCorrect: true },
+            { answerText: '1,8 баллов для игроков победившей команды и 0,9 из проигравшей', isCorrect: false },
+        ],
+    },
+    {
+        questionText: 'Сколько игроков могут получить дополнительные баллы от Судьи?',
+        answerOptions: [
+            { answerText: 'Два игрока из победившей команды и один из проигравшей', isCorrect: false },
+            { answerText: 'До трёх игроков, вне зависимости от команд', isCorrect: false },
+            { answerText: 'До пяти игроков, вне зависимости от команд, шесть игроков по согласованию с ГС', isCorrect: true },
+            { answerText: 'До шести игроков, вне зависимости от команд', isCorrect: false },
+        ],
+    },
+    {
+        questionText: 'В каких случаях игрок должен закончить свою речь?',
+        answerOptions: [
+            { answerText: 'По истечении отведённой минуты', isCorrect: true },
+            { answerText: 'При получении третьего фола во время речи', isCorrect: false },
+            { answerText: 'При дисквалификации игрока', isCorrect: true },
+            { answerText: 'После слова «СПАСИБО», сказанного в контексте завершения речи', isCorrect: true },
+        ],
+        multipleCorrect: true
+    },
+    {
+        questionText: 'Какое наказание следует за фразу "Если бы я был чёрным, я бы никогда не отстрелил в первую ночь игрока из своего города!"?',
+        answerOptions: [
+            { answerText: 'Фол', isCorrect: false },
+            { answerText: 'Дисквалификация', isCorrect: false },
+            { answerText: 'Победа противоположной команды', isCorrect: false },
+            { answerText: 'Никаких санкций', isCorrect: true },
+        ],
+    },
+    {
+        questionText: 'Должен ли Судья засчитать голос игрока, который поставил голос на стол во время произнесения слов "Кто голосует за игрока", и убрал руку до озвучивания номера?',
+        answerOptions: [
+            { answerText: 'Голос засчитывается', isCorrect: false },
+            { answerText: 'Голос не засчитывается', isCorrect: true },
+        ],
+    },
+    {
+        questionText: 'Сколько времени имеет Дон или Шериф "ночью" для выполнения проверки?',
+        answerOptions: [
+            { answerText: '5 секунд', isCorrect: false },
+            { answerText: '10 секунд', isCorrect: false },
+            { answerText: '20 секунд', isCorrect: true },
+            { answerText: 'Судья должен дождаться, пока игрок не сделает проверку', isCorrect: false },
+        ],
+    },
+    {
+        questionText: 'Какое наказание следует если игрок говорит: "Я тебя очень прошу, умоляю, послушай сейчас внимательно мои аргументы!"?',
+        answerOptions: [
+            { answerText: 'Фол', isCorrect: false },
+            { answerText: 'Дисквалификация', isCorrect: false },
+            { answerText: 'Победа противоположной команды', isCorrect: true },
+            { answerText: 'Никаких санкций', isCorrect: false },
+        ],
+    },
+    {
+        questionText: 'В какой ситуации наступает ничья?',
+        answerOptions: [
+            { answerText: 'Никто не покинул игру в течение периода: день – ночь – день – ночь – день, после завершения третьего дня', isCorrect: false },
+            { answerText: 'Никто не покинул игру в течение периода: ночь – день – ночь – день – ночь – день, после завершения третьего дня', isCorrect: true },
+            { answerText: 'Никто не покинул игру в течение периода: день – ночь – день – ночь – день – ночь, после третьей ночи', isCorrect: false },
+        ],
     }
 ];
 
-function PracticeTest() {
+const PracticeTest = () => {
     const [currentQuestion, setCurrentQuestion] = React.useState(0);
     const [showScore, setShowScore] = React.useState(false);
     const [score, setScore] = React.useState(0);
-    const [selectedAnswers, setSelectedAnswers] = React.useState([]);
     const [userAnswers, setUserAnswers] = React.useState([]);
+    const [selectedAnswers, setSelectedAnswers] = React.useState([]);
 
     React.useEffect(() => {
         setSelectedAnswers(new Array(questions[currentQuestion].answerOptions.length).fill(false));
@@ -150,7 +246,7 @@ function PracticeTest() {
 
         const newUserAnswers = [...userAnswers];
         newUserAnswers[currentQuestion] = {
-            selectedAnswers: selectedAnswers,
+            selectedAnswers: [...selectedAnswers],
             isCorrect: isAllCorrect
         };
         setUserAnswers(newUserAnswers);
@@ -177,43 +273,39 @@ function PracticeTest() {
 
     const ReviewSection = () => (
         <div className="mt-8 w-full">
-            <h3 className="text-xl font-bold mb-4">Обзор ответов:</h3>
+            <h3 className="text-xl font-bold mb-4">Обзор ошибок:</h3>
             {questions.map((question, qIndex) => {
                 const userAnswer = userAnswers[qIndex];
                 if (!userAnswer || userAnswer.isCorrect) return null;
 
                 return (
-                    <div key={qIndex} className="mb-6 p-4 bg-gray-50 rounded-lg">
+                    <div key={qIndex} className="mb-6 p-4 bg-gray-50 rounded-lg shadow">
                         <p className="font-semibold mb-2">
                             Вопрос {qIndex + 1}: {question.questionText}
                         </p>
                         <div className="ml-4">
-                            {question.answerOptions.map((option, aIndex) => (
-                                <div 
-                                    key={aIndex} 
-                                    className={`mb-1 ${
-                                        question.multipleCorrect
-                                            ? userAnswer.selectedAnswers[aIndex] 
-                                                ? option.isCorrect 
-                                                    ? 'text-green-600' 
-                                                    : 'text-red-600'
-                                                : option.isCorrect 
-                                                    ? 'text-green-600'
-                                                    : ''
-                                            : aIndex === userAnswer.selectedAnswers[0]
-                                                ? 'text-red-600'
-                                                : option.isCorrect
-                                                    ? 'text-green-600'
-                                                    : ''
-                                    }`}
-                                >
-                                    {question.multipleCorrect ? '☐' : '○'} {option.answerText}
-                                    {((question.multipleCorrect && userAnswer.selectedAnswers[aIndex] && !option.isCorrect) ||
-                                      (!question.multipleCorrect && aIndex === userAnswer.selectedAnswers[0] && !option.isCorrect)) && 
-                                        ' ← Ваш ответ'}
-                                    {option.isCorrect && ' ✓ Правильный ответ'}
-                                </div>
-                            ))}
+                            {question.answerOptions.map((option, aIndex) => {
+                                const isSelected = question.multipleCorrect 
+                                    ? userAnswer.selectedAnswers[aIndex]
+                                    : aIndex === userAnswer.selectedAnswers[0];
+                                
+                                return (
+                                    <div 
+                                        key={aIndex} 
+                                        className={`mb-2 ${
+                                            option.isCorrect 
+                                                ? 'text-green-600' 
+                                                : isSelected 
+                                                    ? 'text-red-600'
+                                                    : 'text-gray-600'
+                                        }`}
+                                    >
+                                        {question.multipleCorrect ? '☐' : '○'} {option.answerText}
+                                        {isSelected && !option.isCorrect && ' ← Ваш неверный ответ'}
+                                        {option.isCorrect && ' ✓ Правильный ответ'}
+                                    </div>
+                                );
+                            })}
                         </div>
                     </div>
                 );
@@ -282,10 +374,6 @@ function PracticeTest() {
             )}
         </div>
     );
-}
+};
 
 export default PracticeTest;
-Last edited just now
-
-
-
