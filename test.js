@@ -1,3 +1,5 @@
+import React from 'react';
+
 const questions = [
     {
         questionText: 'При получении четвёртого фола игрок...',
@@ -104,6 +106,7 @@ function PracticeTest() {
     const [showScore, setShowScore] = React.useState(false);
     const [score, setScore] = React.useState(0);
     const [selectedAnswers, setSelectedAnswers] = React.useState([]);
+    const [userAnswers, setUserAnswers] = React.useState([]);
 
     React.useEffect(() => {
         setSelectedAnswers(new Array(questions[currentQuestion].answerOptions.length).fill(false));
@@ -115,6 +118,13 @@ function PracticeTest() {
             newSelectedAnswers[index] = !newSelectedAnswers[index];
             setSelectedAnswers(newSelectedAnswers);
         } else {
+            const newUserAnswers = [...userAnswers];
+            newUserAnswers[currentQuestion] = {
+                selectedAnswers: [index],
+                isCorrect: isCorrect
+            };
+            setUserAnswers(newUserAnswers);
+            
             if (isCorrect) {
                 setScore(score + 1);
             }
@@ -138,6 +148,13 @@ function PracticeTest() {
             }
         });
 
+        const newUserAnswers = [...userAnswers];
+        newUserAnswers[currentQuestion] = {
+            selectedAnswers: selectedAnswers,
+            isCorrect: isAllCorrect
+        };
+        setUserAnswers(newUserAnswers);
+
         if (isAllCorrect) {
             setScore(score + 1);
         }
@@ -155,12 +172,59 @@ function PracticeTest() {
         setShowScore(false);
         setScore(0);
         setSelectedAnswers([]);
+        setUserAnswers([]);
     };
+
+    const ReviewSection = () => (
+        <div className="mt-8 w-full">
+            <h3 className="text-xl font-bold mb-4">Обзор ответов:</h3>
+            {questions.map((question, qIndex) => {
+                const userAnswer = userAnswers[qIndex];
+                if (!userAnswer || userAnswer.isCorrect) return null;
+
+                return (
+                    <div key={qIndex} className="mb-6 p-4 bg-gray-50 rounded-lg">
+                        <p className="font-semibold mb-2">
+                            Вопрос {qIndex + 1}: {question.questionText}
+                        </p>
+                        <div className="ml-4">
+                            {question.answerOptions.map((option, aIndex) => (
+                                <div 
+                                    key={aIndex} 
+                                    className={`mb-1 ${
+                                        question.multipleCorrect
+                                            ? userAnswer.selectedAnswers[aIndex] 
+                                                ? option.isCorrect 
+                                                    ? 'text-green-600' 
+                                                    : 'text-red-600'
+                                                : option.isCorrect 
+                                                    ? 'text-green-600'
+                                                    : ''
+                                            : aIndex === userAnswer.selectedAnswers[0]
+                                                ? 'text-red-600'
+                                                : option.isCorrect
+                                                    ? 'text-green-600'
+                                                    : ''
+                                    }`}
+                                >
+                                    {question.multipleCorrect ? '☐' : '○'} {option.answerText}
+                                    {((question.multipleCorrect && userAnswer.selectedAnswers[aIndex] && !option.isCorrect) ||
+                                      (!question.multipleCorrect && aIndex === userAnswer.selectedAnswers[0] && !option.isCorrect)) && 
+                                        ' ← Ваш ответ'}
+                                    {option.isCorrect && ' ✓ Правильный ответ'}
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                );
+            })}
+        </div>
+    );
 
     return (
         <div className="flex flex-col items-center p-4 max-w-2xl mx-auto">
             {showScore ? (
-                <div className="text-center">
+                <div className="text-center w-full">
                     <h2 className="text-2xl font-bold mb-4">
                         Результат: {score} из {questions.length} правильных ответов 
                         ({Math.round((score / questions.length) * 100)}%)
@@ -171,6 +235,7 @@ function PracticeTest() {
                     >
                         Пройти тест заново
                     </button>
+                    {score < questions.length && <ReviewSection />}
                 </div>
             ) : (
                 <div className="w-full">
@@ -219,7 +284,8 @@ function PracticeTest() {
     );
 }
 
-ReactDOM.render(
-    <PracticeTest />,
-    document.getElementById('root')
-);
+export default PracticeTest;
+Last edited just now
+
+
+
