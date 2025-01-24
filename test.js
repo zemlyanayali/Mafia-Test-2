@@ -349,6 +349,19 @@ function PracticeTest() {
         setSelectedAnswers(new Array(questions[currentQuestion].answerOptions.length).fill(false));
     }, [currentQuestion]);
 
+    const handleSkipQuestion = () => {
+        const newAnswers = [...answers];
+        newAnswers[currentQuestion] = { skipped: true };
+        setAnswers(newAnswers);
+        
+        const nextQuestion = currentQuestion + 1;
+        if (nextQuestion < questions.length) {
+            setCurrentQuestion(nextQuestion);
+        } else {
+            setShowScore(true);
+        }
+    };
+
     const handleAnswerOptionClick = (isCorrect, index) => {
         if (questions[currentQuestion].multipleCorrect) {
             const newSelectedAnswers = [...selectedAnswers];
@@ -411,6 +424,9 @@ function PracticeTest() {
                 <div className="text-2xl font-bold mb-4">
                     Результат: {score} из {questions.length} правильных ответов 
                     ({Math.round((score / questions.length) * 100)}%)
+                    <div className="text-sm text-gray-600 mt-1">
+                        Пропущено вопросов: {answers.filter(a => a && a.skipped).length}
+                    </div>
                 </div>
                 <button 
                     onClick={resetQuiz}
@@ -424,6 +440,28 @@ function PracticeTest() {
                         {questions.map((question, qIndex) => {
                             const answer = answers[qIndex];
                             if (!answer || answer.correct) return null;
+
+                            if (answer.skipped) {
+                                return (
+                                    <div key={qIndex} className="mb-6 p-4 bg-yellow-50 rounded-lg">
+                                        <p className="font-semibold mb-2">
+                                            Вопрос {qIndex + 1}: {question.questionText}
+                                        </p>
+                                        <p className="text-yellow-600 mb-2">Вопрос был пропущен</p>
+                                        <div className="ml-4">
+                                            {question.answerOptions.map((option, aIndex) => (
+                                                <div 
+                                                    key={aIndex} 
+                                                    className={`mb-1 ${option.isCorrect ? 'text-green-600' : ''}`}
+                                                >
+                                                    {question.multipleCorrect ? '☐' : '○'} {option.answerText}
+                                                    {option.isCorrect && ' ✓ Правильный ответ'}
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </div>
+                                );
+                            }
 
                             return (
                                 <div key={qIndex} className="mb-6 p-4 bg-gray-50 rounded-lg">
@@ -496,14 +534,22 @@ function PracticeTest() {
                     </button>
                 ))}
             </div>
-            {questions[currentQuestion].multipleCorrect && (
+            <div className="flex gap-2 mt-4">
+                {questions[currentQuestion].multipleCorrect && (
+                    <button
+                        onClick={handleMultipleSubmit}
+                        className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
+                    >
+                        Подтвердить ответ
+                    </button>
+                )}
                 <button
-                    onClick={handleMultipleSubmit}
-                    className="mt-4 bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
+                    onClick={handleSkipQuestion}
+                    className="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded"
                 >
-                    Подтвердить ответ
+                    Пропустить вопрос
                 </button>
-            )}
+            </div>
         </div>
     );
 }
