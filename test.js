@@ -344,10 +344,22 @@ function PracticeTest() {
     const [score, setScore] = React.useState(0);
     const [selectedAnswers, setSelectedAnswers] = React.useState([]);
     const [allAnswers, setAllAnswers] = React.useState([]);
+    const [testStarted, setTestStarted] = React.useState(false);
 
     React.useEffect(() => {
-        setSelectedAnswers(new Array(questions[currentQuestion].answerOptions.length).fill(false));
+        if (currentQuestion < questions.length) {
+            setSelectedAnswers(new Array(questions[currentQuestion].answerOptions.length).fill(false));
+        }
     }, [currentQuestion]);
+
+    const startTest = () => {
+        setTestStarted(true);
+        setCurrentQuestion(0);
+        setScore(0);
+        setShowScore(false);
+        setSelectedAnswers([]);
+        setAllAnswers([]);
+    };
 
     const handleSkipQuestion = () => {
         const newAnswers = [...allAnswers];
@@ -407,12 +419,27 @@ function PracticeTest() {
     };
 
     const resetQuiz = () => {
+        setTestStarted(false);
         setCurrentQuestion(0);
         setScore(0);
         setShowScore(false);
         setSelectedAnswers([]);
         setAllAnswers([]);
     };
+
+    if (!testStarted) {
+        return (
+            <div className="flex flex-col items-center justify-center min-h-screen p-4">
+                <h1 className="text-3xl font-bold mb-8">Тест по правилам игры Мафия</h1>
+                <button 
+                    onClick={startTest}
+                    className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg text-xl"
+                >
+                    Начать тест
+                </button>
+            </div>
+        );
+    }
 
     if (showScore) {
         return (
@@ -552,89 +579,3 @@ ReactDOM.render(
     <PracticeTest />,
     document.getElementById('root')
 );
-            newSelectedAnswers[index] = !newSelectedAnswers[index];
-            setSelectedAnswers(newSelectedAnswers);
-        } else {
-            const newAnswers = [...allAnswers];
-            newAnswers[currentQuestion] = { selected: index, correct: isCorrect };
-            setAllAnswers(newAnswers);
-
-            if (isCorrect) setScore(score + 1);
-            
-            const nextQuestion = currentQuestion + 1;
-            if (nextQuestion < questions.length) {
-                setCurrentQuestion(nextQuestion);
-            } else {
-                setShowScore(true);
-            }
-        }
-    };
-
-    const handleMultipleSubmit = () => {
-        let isCorrect = true;
-        questions[currentQuestion].answerOptions.forEach((option, idx) => {
-            if ((option.isCorrect && !selectedAnswers[idx]) || 
-                (!option.isCorrect && selectedAnswers[idx])) {
-                isCorrect = false;
-            }
-        });
-
-        const newAnswers = [...allAnswers];
-        newAnswers[currentQuestion] = { selected: selectedAnswers, correct: isCorrect };
-        setAllAnswers(newAnswers);
-
-        if (isCorrect) setScore(score + 1);
-
-        const nextQuestion = currentQuestion + 1;
-        if (nextQuestion < questions.length) {
-            setCurrentQuestion(nextQuestion);
-        } else {
-            setShowScore(true);
-        }
-    };
-
-    const resetQuiz = () => {
-        setCurrentQuestion(0);
-        setScore(0);
-        setShowScore(false);
-        setSelectedAnswers([]);
-        setAllAnswers([]);
-    };
-
-    if (showScore) {
-        return (
-            <div className="flex flex-col items-center p-4">
-                <div className="text-2xl font-bold mb-4">
-                    Результат: {score} из {questions.length} правильных ответов 
-                    ({Math.round((score / questions.length) * 100)}%)
-                    <div className="text-sm text-gray-600 mt-1">
-                        Пропущено вопросов: {allAnswers.filter(a => a && a.skipped).length}
-                    </div>
-                </div>
-                <button 
-                    onClick={resetQuiz}
-                    className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-                >
-                    Пройти тест заново
-                </button>
-                <div className="mt-8 w-full">
-                    <h3 className="text-xl font-bold mb-4">Обзор ошибок и пропущенных вопросов:</h3>
-                    {questions.map((question, qIndex) => {
-                        const answer = allAnswers[qIndex];
-                        if (!answer || answer.correct) return null;
-
-                        if (answer.skipped) {
-                            return (
-                                <div key={qIndex} className="mb-6 p-4 bg-yellow-50 rounded-lg">
-                                    <p className="font-semibold mb-2">
-                                        Вопрос {qIndex + 1}: {question.questionText}
-                                    </p>
-                                    <p className="text-yellow-600 mb-2">Вопрос был пропущен</p>
-                                    <div className="ml-4">
-                                        {question.answerOptions.map((option, aIndex) => (
-                                            <div 
-                                                key={aIndex} 
-                                                className={`mb-1 ${option.isCorrect ? 'text-green-600' : ''}`}
-                                            >
-                                                {question.multipleCorrect ? '☐' : '○'} {option.answerText}
-                                                {option.isCorrect && ' ✓ Правильный ответ'}
