@@ -338,6 +338,15 @@ const questions = [
     }
 ];
 
+// Add this before ReactDOM.render
+function shuffle(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+    }
+    return array;
+}
+
 function PracticeTest() {
     const [currentQuestion, setCurrentQuestion] = React.useState(0);
     const [showScore, setShowScore] = React.useState(false);
@@ -345,8 +354,7 @@ function PracticeTest() {
     const [selectedAnswers, setSelectedAnswers] = React.useState([]);
     const [allAnswers, setAllAnswers] = React.useState([]);
     const [testStarted, setTestStarted] = React.useState(false);
-    const [randomizedQuestions] = React.useState(() => 
-        questions.sort(() => Math.random() - 0.5));
+    const [randomizedQuestions] = React.useState(() => shuffle([...questions]));
 
     React.useEffect(() => {
         if (currentQuestion < randomizedQuestions.length) {
