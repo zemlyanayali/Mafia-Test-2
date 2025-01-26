@@ -18,6 +18,24 @@ const questions = [
         ],
     },
     {
+        questionText: 'Во время заключительной минуты игрок говорит: "Если бы я был чёрным, я бы никогда не отстрелил в первую ночь игрока из своего города!" Какое наказание за это следует?',
+        answerOptions: [
+            { answerText: 'Фол', isCorrect: false },
+            { answerText: 'Дисквалификация', isCorrect: false },
+            { answerText: 'Победа противоположной команды', isCorrect: true },
+            { answerText: 'Предупреждение', isCorrect: false },
+        ],
+    },
+    {
+        questionText: 'Во время дневного обсуждения игрок говорит: "Я тебя очень прошу, умоляю, послушай сейчас внимательно мои аргументы!". Какое наказание за это следует?',
+        answerOptions: [
+            { answerText: 'Фол', isCorrect: false },
+            { answerText: 'Дисквалификация', isCorrect: false },
+            { answerText: 'Победа противоположной команды', isCorrect: false },
+            { answerText: 'Никаких санкций', isCorrect: true },
+        ],
+    },
+    {
         questionText: 'За какие нарушения даётся фол?',
         answerOptions: [
             { answerText: 'Речь не в свою игровую минуту', isCorrect: true },
@@ -28,12 +46,93 @@ const questions = [
         multipleCorrect: true
     },
     {
+        questionText: 'В каких случаях игрок должен закончить свою речь (т.е. его речь считается законченной и он не может говорить дальше)? Укажите все верные варианты:',
+        answerOptions: [
+            { answerText: 'По истечении отведённой минуты', isCorrect: true },
+            { answerText: 'При дисквалификации игрока', isCorrect: true },
+            { answerText: 'При вставании игрока со стула', isCorrect: true },
+            { answerText: 'При получении третьего фола во время речи', isCorrect: false },
+            { answerText: 'После того, как игрок просто замолчал, кивнув Судье, что он закончил', isCorrect: false },
+            { answerText: 'После слова «СПАСИБО», сказанного в контексте завершения речи', isCorrect: true },
+            { answerText: 'После любого употребления слова «СПАСИБО»', isCorrect: false },
+            { answerText: 'После слова «ПАС», сказанного в контексте завершения речи', isCorrect: true },
+            { answerText: 'После любого употребления слова «ПАС»', isCorrect: false },
+            { answerText: 'После слов «У МЕНЯ ВСЁ»', isCorrect: false },
+            { answerText: 'После слов «Если игрок не был удалён, он обязан договорить минуту до конца»', isCorrect: false },
+        ],
+        multipleCorrect: true
+    },
+    {
+        questionText: 'Игрок хлопает в ладоши, чтобы этим привлечь к себе внимание говорящего игрока. Ваши действия?',
+        answerOptions: [
+            { answerText: 'Не применять никаких санкций', isCorrect: false },
+            { answerText: 'Поставить игроку фол в случае жалобы со стороны говорящего игрока', isCorrect: false },
+            { answerText: 'Поставить игроку фол за хлопки в ладоши', isCorrect: true },
+            { answerText: 'Дисквалифицировать игрока', isCorrect: false },
+            { answerText: 'Сделать игроку устное предупреждение', isCorrect: false },
+        ],
+    },
+    {
+        questionText: 'Если после "перестрелки" между игроками №2 и №5 большинство проголосовало за их подъём, и после этого игрок №2 был дисквалифицирован, то в этом случае:',
+        answerOptions: [
+            { answerText: 'Игрок №5 остается в игре', isCorrect: false },
+            { answerText: 'Игрок №5 покидает игру по голосованию, на следующий день голосование отменяется', isCorrect: false },
+            { answerText: 'Игрок №5 покидает игру по голосованию, на следующий день голосование проводится', isCorrect: true },
+        ],
+    },
+    {
+        questionText: 'Какую экипировку игроку запрещено использовать в игре? Укажите все верные варианты:',
+        answerOptions: [
+            { answerText: 'Экипировку, которая не соответствует установленному дресс-коду', isCorrect: false },
+            { answerText: 'Экипировку, которая не прошла сертификацию у Главного судьи', isCorrect: false },
+            { answerText: 'Экипировку с символикой других федереаций игры мафия', isCorrect: false },
+            { answerText: 'Экипировку, дающую незаслуженное преимущество перед игроками', isCorrect: true },
+            { answerText: 'Экипировку, представляющую опасность для игроков', isCorrect: true },
+            { answerText: 'Экипировку, которая не нравится Судье по этическим соображениям', isCorrect: false },
+            { answerText: 'Экипировку, оскорбляющую кого-либо из игроков или зрителей', isCorrect: true },
+            { answerText: 'Можно использовать любую экипировку', isCorrect: false },
+        ],
+        multipleCorrect: true
+    },
+    {
+        questionText: 'Какие формулировки выставления игрока №3 на голосование являются корректными (т.е. кандидатура должна быть принята)? Укажите все верные варианты:',
+        answerOptions: [
+            { answerText: 'Хочу выставить игрока номер три', isCorrect: false },
+            { answerText: 'Выставляю третьего игрока', isCorrect: true },
+            { answerText: 'Я выставлю игрока номер три', isCorrect: false },
+            { answerText: 'Я выставляю игрока номер три', isCorrect: true },
+            { answerText: 'Выставьте игрока номер три', isCorrect: false },
+            { answerText: 'Выставляю три', isCorrect: true },
+            { answerText: 'Прошу выставить игрока номер три', isCorrect: false },
+        ],
+        multipleCorrect: true
+    },
+    {
         questionText: 'Какой штраф получает игрок за дисквалификацию (удаление)?',
         answerOptions: [
             { answerText: '0.3 балла', isCorrect: false },
             { answerText: '0.5 балла', isCorrect: false },
             { answerText: '0.8 балла', isCorrect: true },
             { answerText: '1.0 балл', isCorrect: false },
+        ],
+    },
+    {
+        questionText: 'Во время голосования против очередной кандидатуры игрок, ранее не голосовавший, совершает стук кулаком сбоку стола, чтобы запутать игроков. Ваши действия:',
+        answerOptions: [
+            { answerText: 'Засчитать это как голос', isCorrect: false },
+            { answerText: 'Поставить игроку фол и засчитать это как голос', isCorrect: false },
+            { answerText: 'Поставить игроку фол и не засчитывать голос', isCorrect: false },
+            { answerText: 'Дисквалифицировать игрока', isCorrect: true },
+            { answerText: 'Поставить игроку фол и провести голосование заново', isCorrect: false },
+        ],
+    },
+     {
+        questionText: 'На голосовании за игрока № 3 проголосовали 4 игрока, один из которых поставил руку вместе со словом "спасибо" или "стоп". Ваши действия?',
+        answerOptions: [
+            { answerText: 'Засчитать 3 голоса, продолжить голосование', isCorrect: false },
+            { answerText: 'Засчитать 4 голоса, продолжить голосование', isCorrect: false },
+            { answerText: 'Засчитать 3 голоса, пояснив какой именно голос не принят', isCorrect: true },
+            { answerText: 'Засчитать 3 голоса, поставить фол игроку, который поставил руку вместе со словом "спасибо" или "стоп"', isCorrect: false },
         ],
     },
     {
@@ -88,14 +187,153 @@ const questions = [
     {
         questionText: 'Какие фазы есть в игре?',
         answerOptions: [
-            { answerText: 'День', isCorrect: false },
+            { answerText: 'День', isCorrect: true },
             { answerText: 'Ночь', isCorrect: true },
-            { answerText: 'Утро', isCorrect: true },
+            { answerText: 'Утро', isCorrect: false },
             { answerText: 'Разгон', isCorrect: false },
             { answerText: 'Подведение итогов', isCorrect: false },
             { answerText: 'Открытие', isCorrect: false },
         ],
         multipleCorrect: true
+    },
+    {
+        questionText: 'Если игрок получил 3 фола и после этого попал в "угадайку" с 3 игроками, то он:',
+        answerOptions: [
+            { answerText: 'получает 30 секунд', isCorrect: false },
+            { answerText: 'получает минуту', isCorrect: true },
+            { answerText: 'не имеет права слова', isCorrect: false },
+            { answerText: 'не получает дополнительные балы от судьи', isCorrect: false },
+        ],
+    },
+    {
+        questionText: 'Если ночью мафия совершила "отстрел" игрока, который был удалён за нарушение, совершённое после того, как завершилось голосование предыдущего дня, но до того, как Судья начал отсчитывать отстрел, то в этом случае:',
+        answerOptions: [
+            { answerText: 'Днём голосование отменяется, судья утром объявляет: "Игрок был удалён, в городе промах"', isCorrect: true },
+            { answerText: 'Днём голосование проводится, судья утром объявляет: "Игрок был убит и удалён"', isCorrect: false },
+        ],
+    },
+    {
+        questionText: 'Каков лимит общей суммы дополнительных баллов, которые игроки могут получить от Судьи?',
+        answerOptions: [
+            { answerText: '2,4 баллов для игроков победившей команды и 0,6 из проигравшей', isCorrect: false },
+            { answerText: '2,2 балла в сумме, вне зависимости от команд', isCorrect: false },
+            { answerText: '2,8 балла в сумме или 3,5 по согласованию с ГСом, неограничено по согласованию с СК, вне зависимости от команд', isCorrect: true },
+            { answerText: '1,8 баллов для игроков победившей команды и 0,9 из проигравшей', isCorrect: false },
+            { answerText: '2,8 балла в сумме, вне зависимости от команд', isCorrect: false },
+            { answerText: '2,8 баллов в сумме для всех игроков, 3,5 в сумме при условии, что один из игроков получил 1 и более баллов', isCorrect: false },
+            { answerText: '2,8 баллов в сумме, 3 по согласованию с ГСом, 3,5 по согласованию с СК, вне зависимости от команд', isCorrect: false },
+            { answerText: '2,4 балла победившей команде, 1,5 баллов', isCorrect: false },
+        ],
+    },
+    {
+        questionText: 'Сколько игроков могут получить дополнительные баллы от Судьи?',
+        answerOptions: [
+            { answerText: 'Два игрока из победившей команды и один из проигравшей', isCorrect: false },
+            { answerText: 'До трёх игроков, вне зависимости от команд', isCorrect: false },
+            { answerText: 'До пяти игроков, вне зависимости от команд, шесть игроков по согласованию с ГС', isCorrect: false },
+            { answerText: 'До шести игроков, вне зависимости от команд', isCorrect: false },
+            { answerText: 'До пяти игроков, вне зависимости от команд, не ограничено игроков по согласованию с ГС', isCorrect: true },
+        ],
+    },
+    {
+        questionText: 'В каких случаях игрок должен закончить свою речь?',
+        answerOptions: [
+            { answerText: 'По истечении отведённой минуты', isCorrect: true },
+            { answerText: 'При получении третьего фола во время речи', isCorrect: false },
+            { answerText: 'При дисквалификации игрока', isCorrect: true },
+            { answerText: 'После слова «СПАСИБО», сказанного в контексте завершения речи', isCorrect: true },
+        ],
+        multipleCorrect: true
+    },
+    {
+        questionText: 'Какое наказание следует за фразу "Если бы я был чёрным, я бы никогда не отстрелил в первую ночь игрока из своего города!"?',
+        answerOptions: [
+            { answerText: 'Фол', isCorrect: false },
+            { answerText: 'Дисквалификация', isCorrect: false },
+            { answerText: 'Победа противоположной команды', isCorrect: false },
+            { answerText: 'Никаких санкций', isCorrect: true },
+        ],
+    },
+    {
+        questionText: 'Должен ли Судья засчитать голос игрока, который поставил голос на стол во время произнесения слов "Кто голосует за игрока", и убрал руку до озвучивания номера?',
+        answerOptions: [
+            { answerText: 'Голос засчитывается', isCorrect: false },
+            { answerText: 'Голос не засчитывается', isCorrect: true },
+        ],
+    },
+    {
+        questionText: 'Сколько времени имеет Дон или Шериф "ночью" для выполнения проверки?',
+        answerOptions: [
+            { answerText: '5 секунд', isCorrect: false },
+            { answerText: '10 секунд', isCorrect: false },
+            { answerText: '20 секунд', isCorrect: true },
+            { answerText: 'Судья должен дождаться, пока игрок не сделает проверку', isCorrect: false },
+        ],
+    },
+    {
+        questionText: 'Какое наказание следует если игрок говорит: "Я тебя очень прошу, умоляю, послушай сейчас внимательно мои аргументы!"?',
+        answerOptions: [
+            { answerText: 'Фол', isCorrect: false },
+            { answerText: 'Дисквалификация', isCorrect: false },
+            { answerText: 'Победа противоположной команды', isCorrect: true },
+            { answerText: 'Никаких санкций', isCorrect: false },
+        ],
+    },
+    {
+        questionText: 'Какие из перечисленных нарушений караются дисквалификацией?',
+        answerOptions: [
+            { answerText: 'Голосование ладонью, локтем или пальцем', isCorrect: true },
+            { answerText: 'Прикосновения к другому игроку во время дневного обсуждения', isCorrect: false },
+            { answerText: 'Непроизвольное подглядывание во время ночи', isCorrect: true },
+            { answerText: 'Нецензурная лексика', isCorrect: true },
+            { answerText: 'Активные стуки по игровому столу во время дневного обсуждения', isCorrect: false },
+            { answerText: 'Ночные выкрики и разговоры', isCorrect: true },
+            { answerText: 'Попытка подкупа или его аналога с целью влияния на игру', isCorrect: false },
+            { answerText: 'Получение подсказки от зрителей', isCorrect: false },
+            { answerText: 'Ночные подсказки жестами Дону или Шерифу', isCorrect: true },
+            { answerText: 'Апеллирование к неигровым этическим или религиозным ценностям с целью влияния на исход голосования или доказывания роли во время дневного обсуждения или голосования', isCorrect: true },
+            { answerText: 'Сокрытие речевой информации путём её озвучивания на иностранном языке во время дневного обсуждения или голосования', isCorrect: true },
+            { answerText: 'Жестикуляция и призывы в фазе голосования', isCorrect: false },
+            { answerText: 'Отвлекающая жестикуляция во время дневного обсуждения', isCorrect: false },
+            { answerText: 'Шёпот, мычания во время дневного обсуждения', isCorrect: false },
+            { answerText: 'Оскорбление игроков, зрителей или судей', isCorrect: true },
+            { answerText: 'Прикосновение к другому игроку во время ночи', isCorrect: true },
+            { answerText: 'Игрок заплакал во время дневного обсуждения или голосования', isCorrect: true },
+            { answerText: 'Грубое неэтичное поведение', isCorrect: false },
+            { answerText: 'Попытка проголосовать против нескольких кандидатур', isCorrect: false },
+            { answerText: 'Использование слова "суицид" в игровом контексте ("дон просто суицид совершил дав меня красным")', isCorrect: true },
+            { answerText: 'Шепот на ухо другому игроку во время дневного обсуждения или голосования, явно скрываемый от судей и большинства игроков', isCorrect: true },
+            { answerText: 'Использование слова "самоубийство" в игровом контексте ("он меня дал красной проверкой. Если он дон - то он просто самоубийца."', isCorrect: false },
+            { answerText: 'Во время игровой фазы "День" игрок не снял маску с лица после предупреждения от Судьи', isCorrect: false },
+        ],
+        multipleCorrect: true
+    },
+    {
+        questionText: 'За какие из перечисленных нарушений присуждается победа противоположной команды:',
+        answerOptions: [
+            { answerText:  'Ночные подсказки жестами Дону или Шерифу', isCorrect: false },
+            { answerText:  'Шепот на ухо другому игроку во время дневного обсуждения или голосования, явно скрываемый от судей и большинства игроков', isCorrect: false },
+            { answerText:  'Клятва, пари или их аналоги', isCorrect: true },
+            { answerText:  'Попытка подкупа или его аналога с целью влияния на игру', isCorrect: true },
+            { answerText:  'Шериф заплакал во время дневного обсуждения или голосования', isCorrect: false },
+            { answerText:  'Жестикуляция под столом или за спинами игроков', isCorrect: false },
+            { answerText:  'Непроизвольное подглядывание во время ночи', isCorrect: false },
+            { answerText:  'Апеллирование к ночным звукам и шорохам', isCorrect: false },
+            { answerText:  'Доказывание игроком, "вскрывшимся" шерифом, своей роли с помощью уникальной “ночной” информации', isCorrect: true },
+            { answerText:  'Получение подсказки от зрителей', isCorrect: true },
+            { answerText:  'Использование угрозы или шантажа с целью влияния на игру', isCorrect: true },
+            { answerText:  'Апеллирование к неигровым этическим или религиозным ценностям с целью влияния на исход голосования или доказывания роли во время дневного обсуждения или голосования', isCorrect: false },
+        ],
+        multipleCorrect: true
+    },
+    {
+        questionText: 'В какой ситуации наступает ничья?',
+        answerOptions: [
+            { answerText: 'Никто не покинул игру в течение периода: день – ночь – день – ночь – день, после завершения третьего дня', isCorrect: false },
+            { answerText: 'Никто не покинул игру в течение периода: ночь – день – ночь – день – ночь – день, после завершения третьего дня', isCorrect: false },
+            { answerText: 'Никто не покинул игру в течение периода: день – ночь – день – ночь – день – ночь, после третьей ночи', isCorrect: true },
+            { answerText: 'Чёрные промахнулись три раза подряд', isCorrect: false },
+        ],
     }
 ];
 
