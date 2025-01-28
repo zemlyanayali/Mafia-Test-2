@@ -549,7 +549,7 @@ const questions = [
 
 // Add this before ReactDOM.render
 function PracticeTest() {
-    const PASSING_SCORE = 80; // 80% to pass
+    const PASSING_SCORE = 90; // 90% to pass
     const [currentQuestion, setCurrentQuestion] = React.useState(0);
     const [showScore, setShowScore] = React.useState(false);
     const [score, setScore] = React.useState(0);
