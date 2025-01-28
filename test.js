@@ -549,24 +549,21 @@ const questions = [
 
 // Add this before ReactDOM.render
 function PracticeTest() {
-    const QUESTIONS_PER_SESSION = 20;
-    const PASSING_SCORE = 90; // 90% to pass
+    const PASSING_SCORE = 80; // 80% to pass
     const [currentQuestion, setCurrentQuestion] = React.useState(0);
     const [showScore, setShowScore] = React.useState(false);
     const [score, setScore] = React.useState(0);
     const [selectedAnswers, setSelectedAnswers] = React.useState([]);
     const [allAnswers, setAllAnswers] = React.useState([]);
     const [testStarted, setTestStarted] = React.useState(false);
-    const [randomizedQuestions] = React.useState(() => 
-        getRandomQuestions(questions, QUESTIONS_PER_SESSION)
-    );
+    const [randomizedQuestions] = React.useState(() => [...questions].sort(() => Math.random() - 0.5));
 
     // Calculate progress percentage
-    const progress = (currentQuestion / QUESTIONS_PER_SESSION) * 100;
-    const isPassed = ((score / QUESTIONS_PER_SESSION) * 100) >= PASSING_SCORE;
+    const progress = (currentQuestion / questions.length) * 100;
+    const isPassed = ((score / questions.length) * 100) >= PASSING_SCORE;
 
     React.useEffect(() => {
-        if (currentQuestion < QUESTIONS_PER_SESSION) {
+        if (currentQuestion < questions.length) {
             setSelectedAnswers(new Array(randomizedQuestions[currentQuestion].answerOptions.length).fill(false));
         }
     }, [currentQuestion]);
@@ -586,7 +583,7 @@ function PracticeTest() {
         setAllAnswers(newAnswers);
         
         const nextQuestion = currentQuestion + 1;
-        if (nextQuestion < QUESTIONS_PER_SESSION) {
+        if (nextQuestion < questions.length) {
             setCurrentQuestion(nextQuestion);
         } else {
             setShowScore(true);
@@ -606,7 +603,7 @@ function PracticeTest() {
             if (isCorrect) setScore(score + 1);
             
             const nextQuestion = currentQuestion + 1;
-            if (nextQuestion < QUESTIONS_PER_SESSION) {
+            if (nextQuestion < questions.length) {
                 setCurrentQuestion(nextQuestion);
             } else {
                 setShowScore(true);
@@ -630,7 +627,7 @@ function PracticeTest() {
         if (isCorrect) setScore(score + 1);
 
         const nextQuestion = currentQuestion + 1;
-        if (nextQuestion < QUESTIONS_PER_SESSION) {
+        if (nextQuestion < questions.length) {
             setCurrentQuestion(nextQuestion);
         } else {
             setShowScore(true);
@@ -646,7 +643,7 @@ function PracticeTest() {
             <div className="flex flex-col items-center justify-center min-h-screen p-4">
                 <h1 className="text-3xl font-bold mb-8">Тест по правилам игры Мафия</h1>
                 <div className="text-center mb-4">
-                    <p className="text-gray-600">{QUESTIONS_PER_SESSION} случайных вопросов</p>
+                    <p className="text-gray-600">{questions.length} вопросов</p>
                     <p className="text-gray-600">Для сдачи необходимо набрать {PASSING_SCORE}% правильных ответов</p>
                 </div>
                 <button 
@@ -660,11 +657,11 @@ function PracticeTest() {
     }
 
     if (showScore) {
-        const percentage = Math.round((score / QUESTIONS_PER_SESSION) * 100);
+        const percentage = Math.round((score / questions.length) * 100);
         return (
             <div className="flex flex-col items-center p-4">
                 <div className="text-2xl font-bold mb-4">
-                    Результат: {score} из {QUESTIONS_PER_SESSION} правильных ответов 
+                    Результат: {score} из {questions.length} правильных ответов 
                     ({percentage}%)
                     <div className={`text-xl mt-2 ${isPassed ? 'text-green-600' : 'text-red-600'}`}>
                         {isPassed ? 'Тест сдан!' : 'Тест не сдан'}
@@ -755,7 +752,7 @@ function PracticeTest() {
             </div>
             <div className="mb-4">
                 <div className="text-lg mb-2">
-                    <span className="font-bold">Вопрос {currentQuestion + 1}</span>/{QUESTIONS_PER_SESSION}
+                    <span className="font-bold">Вопрос {currentQuestion + 1}</span>/{questions.length}
                 </div>
                 <div className="text-xl mb-4">{randomizedQuestions[currentQuestion].questionText}</div>
                 {randomizedQuestions[currentQuestion].multipleCorrect && (
