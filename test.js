@@ -548,16 +548,9 @@ const questions = [
 ];
 
 // Add this before ReactDOM.render
-function shuffle(array) {
-    for (let i = array.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [array[i], array[j]] = [array[j], array[i]];
-    }
-    return array;
-}
-
 function PracticeTest() {
     const QUESTIONS_PER_SESSION = 20;
+    const PASSING_SCORE = 90; // 90% to pass
     const [currentQuestion, setCurrentQuestion] = React.useState(0);
     const [showScore, setShowScore] = React.useState(false);
     const [score, setScore] = React.useState(0);
@@ -565,11 +558,15 @@ function PracticeTest() {
     const [allAnswers, setAllAnswers] = React.useState([]);
     const [testStarted, setTestStarted] = React.useState(false);
     const [randomizedQuestions] = React.useState(() => 
-    getRandomQuestions(questions, QUESTIONS_PER_SESSION)
-);
+        getRandomQuestions(questions, QUESTIONS_PER_SESSION)
+    );
+
+    // Calculate progress percentage
+    const progress = (currentQuestion / QUESTIONS_PER_SESSION) * 100;
+    const isPassed = ((score / QUESTIONS_PER_SESSION) * 100) >= PASSING_SCORE;
 
     React.useEffect(() => {
-        if (currentQuestion < randomizedQUESTIONS_PER_SESSION) {
+        if (currentQuestion < QUESTIONS_PER_SESSION) {
             setSelectedAnswers(new Array(randomizedQuestions[currentQuestion].answerOptions.length).fill(false));
         }
     }, [currentQuestion]);
@@ -587,9 +584,9 @@ function PracticeTest() {
         const newAnswers = [...allAnswers];
         newAnswers[currentQuestion] = { skipped: true };
         setAllAnswers(newAnswers);
-
+        
         const nextQuestion = currentQuestion + 1;
-        if (nextQuestion < randomizedQUESTIONS_PER_SESSION) {
+        if (nextQuestion < QUESTIONS_PER_SESSION) {
             setCurrentQuestion(nextQuestion);
         } else {
             setShowScore(true);
@@ -607,9 +604,9 @@ function PracticeTest() {
             setAllAnswers(newAnswers);
 
             if (isCorrect) setScore(score + 1);
-
+            
             const nextQuestion = currentQuestion + 1;
-            if (nextQuestion < randomizedQUESTIONS_PER_SESSION) {
+            if (nextQuestion < QUESTIONS_PER_SESSION) {
                 setCurrentQuestion(nextQuestion);
             } else {
                 setShowScore(true);
@@ -633,7 +630,7 @@ function PracticeTest() {
         if (isCorrect) setScore(score + 1);
 
         const nextQuestion = currentQuestion + 1;
-        if (nextQuestion < randomizedQUESTIONS_PER_SESSION) {
+        if (nextQuestion < QUESTIONS_PER_SESSION) {
             setCurrentQuestion(nextQuestion);
         } else {
             setShowScore(true);
@@ -641,13 +638,17 @@ function PracticeTest() {
     };
 
     const resetQuiz = () => {
-        window.location.reload(); // This will refresh the page to get new random questions
-};
+        window.location.reload();
+    };
 
     if (!testStarted) {
         return (
             <div className="flex flex-col items-center justify-center min-h-screen p-4">
                 <h1 className="text-3xl font-bold mb-8">Тест по правилам игры Мафия</h1>
+                <div className="text-center mb-4">
+                    <p className="text-gray-600">{QUESTIONS_PER_SESSION} случайных вопросов</p>
+                    <p className="text-gray-600">Для сдачи необходимо набрать {PASSING_SCORE}% правильных ответов</p>
+                </div>
                 <button 
                     onClick={startTest}
                     className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg text-xl"
@@ -659,11 +660,15 @@ function PracticeTest() {
     }
 
     if (showScore) {
+        const percentage = Math.round((score / QUESTIONS_PER_SESSION) * 100);
         return (
             <div className="flex flex-col items-center p-4">
                 <div className="text-2xl font-bold mb-4">
-                    Результат: {score} из {randomizedQUESTIONS_PER_SESSION} правильных ответов 
-                    ({Math.round((score / randomizedQUESTIONS_PER_SESSION) * 100)}%)
+                    Результат: {score} из {QUESTIONS_PER_SESSION} правильных ответов 
+                    ({percentage}%)
+                    <div className={`text-xl mt-2 ${isPassed ? 'text-green-600' : 'text-red-600'}`}>
+                        {isPassed ? 'Тест сдан!' : 'Тест не сдан'}
+                    </div>
                     <div className="text-sm text-gray-600 mt-1">
                         Пропущено вопросов: {allAnswers.filter(a => a && a.skipped).length}
                     </div>
@@ -741,9 +746,16 @@ function PracticeTest() {
 
     return (
         <div className="w-full max-w-2xl mx-auto p-4">
+            {/* Progress bar */}
+            <div className="w-full bg-gray-200 rounded-full h-2.5 mb-4">
+                <div 
+                    className="bg-blue-600 h-2.5 rounded-full transition-all duration-300" 
+                    style={{ width: `${progress}%` }}
+                ></div>
+            </div>
             <div className="mb-4">
                 <div className="text-lg mb-2">
-                    <span className="font-bold">Вопрос {currentQuestion + 1}</span>/{randomizedQUESTIONS_PER_SESSION}
+                    <span className="font-bold">Вопрос {currentQuestion + 1}</span>/{QUESTIONS_PER_SESSION}
                 </div>
                 <div className="text-xl mb-4">{randomizedQuestions[currentQuestion].questionText}</div>
                 {randomizedQuestions[currentQuestion].multipleCorrect && (
