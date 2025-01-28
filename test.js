@@ -1,3 +1,8 @@
+function getRandomQuestions(questions, count) {
+    const shuffled = [...questions].sort(() => Math.random() - 0.5);
+    return shuffled.slice(0, count);
+}
+
 const questions = [
     {
         questionText: 'При получении четвёртого фола игрок...',
@@ -103,6 +108,7 @@ const questions = [
         answerOptions: [
             { answerText: 'Голос засчитывается', isCorrect: true },
             { answerText: 'Голос не засчитывается', isCorrect: false },
+        ],
     },
     {
         questionText: 'Во время голосования против очередной кандидатуры игрок, ранее не голосовавший, хлопает ладонью по столу, чтобы запутать игроков. Ваши действия:',
@@ -444,8 +450,8 @@ const questions = [
         answerOptions: [
             { answerText: 'Слезы', isCorrect: true },
             { answerText: 'Шепот на ухо другому игроку', isCorrect: true },
-            { answerText: 'При получении третьего фола во время речиИспользование мата', isCorrect: false },
-            { answerText: 'Оскорбление другого игрока или судьиПосле того, как игрок просто замолчал, кивнув Судье, что он закончил', isCorrect: false },
+            { answerText: 'Использование мата', isCorrect: false },
+            { answerText: 'Оскорбление другого игрока или судьи', isCorrect: false },
             { answerText: 'Непроизвольное подглядывание ночью', isCorrect: true },
         ],
         multipleCorrect: true
@@ -551,16 +557,19 @@ function shuffle(array) {
 }
 
 function PracticeTest() {
+    const QUESTIONS_PER_SESSION = 20;
     const [currentQuestion, setCurrentQuestion] = React.useState(0);
     const [showScore, setShowScore] = React.useState(false);
     const [score, setScore] = React.useState(0);
     const [selectedAnswers, setSelectedAnswers] = React.useState([]);
     const [allAnswers, setAllAnswers] = React.useState([]);
     const [testStarted, setTestStarted] = React.useState(false);
-    const [randomizedQuestions] = React.useState(() => shuffle([...questions]));
+    const [randomizedQuestions] = React.useState(() => 
+    getRandomQuestions(questions, QUESTIONS_PER_SESSION)
+);
 
     React.useEffect(() => {
-        if (currentQuestion < randomizedQuestions.length) {
+        if (currentQuestion < randomizedQUESTIONS_PER_SESSION) {
             setSelectedAnswers(new Array(randomizedQuestions[currentQuestion].answerOptions.length).fill(false));
         }
     }, [currentQuestion]);
@@ -580,7 +589,7 @@ function PracticeTest() {
         setAllAnswers(newAnswers);
 
         const nextQuestion = currentQuestion + 1;
-        if (nextQuestion < randomizedQuestions.length) {
+        if (nextQuestion < randomizedQUESTIONS_PER_SESSION) {
             setCurrentQuestion(nextQuestion);
         } else {
             setShowScore(true);
@@ -600,7 +609,7 @@ function PracticeTest() {
             if (isCorrect) setScore(score + 1);
 
             const nextQuestion = currentQuestion + 1;
-            if (nextQuestion < randomizedQuestions.length) {
+            if (nextQuestion < randomizedQUESTIONS_PER_SESSION) {
                 setCurrentQuestion(nextQuestion);
             } else {
                 setShowScore(true);
@@ -624,7 +633,7 @@ function PracticeTest() {
         if (isCorrect) setScore(score + 1);
 
         const nextQuestion = currentQuestion + 1;
-        if (nextQuestion < randomizedQuestions.length) {
+        if (nextQuestion < randomizedQUESTIONS_PER_SESSION) {
             setCurrentQuestion(nextQuestion);
         } else {
             setShowScore(true);
@@ -632,13 +641,8 @@ function PracticeTest() {
     };
 
     const resetQuiz = () => {
-        setTestStarted(false);
-        setCurrentQuestion(0);
-        setScore(0);
-        setShowScore(false);
-        setSelectedAnswers([]);
-        setAllAnswers([]);
-    };
+        window.location.reload(); // This will refresh the page to get new random questions
+};
 
     if (!testStarted) {
         return (
@@ -658,8 +662,8 @@ function PracticeTest() {
         return (
             <div className="flex flex-col items-center p-4">
                 <div className="text-2xl font-bold mb-4">
-                    Результат: {score} из {randomizedQuestions.length} правильных ответов 
-                    ({Math.round((score / randomizedQuestions.length) * 100)}%)
+                    Результат: {score} из {randomizedQUESTIONS_PER_SESSION} правильных ответов 
+                    ({Math.round((score / randomizedQUESTIONS_PER_SESSION) * 100)}%)
                     <div className="text-sm text-gray-600 mt-1">
                         Пропущено вопросов: {allAnswers.filter(a => a && a.skipped).length}
                     </div>
@@ -739,7 +743,7 @@ function PracticeTest() {
         <div className="w-full max-w-2xl mx-auto p-4">
             <div className="mb-4">
                 <div className="text-lg mb-2">
-                    <span className="font-bold">Вопрос {currentQuestion + 1}</span>/{randomizedQuestions.length}
+                    <span className="font-bold">Вопрос {currentQuestion + 1}</span>/{randomizedQUESTIONS_PER_SESSION}
                 </div>
                 <div className="text-xl mb-4">{randomizedQuestions[currentQuestion].questionText}</div>
                 {randomizedQuestions[currentQuestion].multipleCorrect && (
