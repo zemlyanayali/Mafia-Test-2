@@ -329,13 +329,6 @@ const questions = [
         ],
     },
     {
-        questionText: 'Должен ли Судья засчитать голос игрока, который поставил голос на стол во время произнесения слов "Кто голосует за игрока", и убрал руку до озвучивания номера?',
-        answerOptions: [
-            { answerText: 'Голос засчитывается', isCorrect: false },
-            { answerText: 'Голос не засчитывается', isCorrect: true },
-        ],
-    },
-    {
         questionText: 'Сколько времени имеет Дон или Шериф "ночью" для выполнения проверки?',
         answerOptions: [
             { answerText: '5 секунд', isCorrect: false },
